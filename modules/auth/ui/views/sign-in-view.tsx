@@ -18,8 +18,11 @@ import { useForm } from "react-hook-form";
 import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
+
 
 const formSchema = z.object({
   email: z.email(),
@@ -46,11 +49,32 @@ const SignInView = () => {
       {
         email: data.email,
         password: data.password,
+        callbackURL: "/"
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
+          router.push("/")
+        },
+        onError: ({ error }) => {
+          setPending(false);
+          setError(error.message);
+        },
+      },
+    );
+  };
+
+  const onSocial = (provider: "github" | "google") => {
+    setError(null);
+    setPending(true);
+    authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/"
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
         },
         onError: ({ error }) => {
           setPending(false);
@@ -132,16 +156,28 @@ const SignInView = () => {
                     variant="outline"
                     type="button"
                     className="w-full"
+                    onClick={() => onSocial("google")}
                   >
-                    Google
+                     <Icon
+                                          icon="mynaui:google-solid"
+                                          width="34"
+                                          height="34"
+                                          style={{ color: "#bcbcbc" }}
+                                        />
                   </Button>
                   <Button
                     disabled={pending}
+                    onClick={() => onSocial("github")}
                     variant="outline"
                     type="button"
                     className="w-full"
                   >
-                    GitHub
+                     <Icon
+                                          icon="ri:github-fill"
+                                          width="34"
+                                          height="34"
+                                          style={{ color: "#bcbcbc" }}
+                                        />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
@@ -158,7 +194,13 @@ const SignInView = () => {
           </Form>
 
           <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gapy-4 items-center justify-center">
-            <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
+            <Image
+              src="/logo.svg"
+              alt="Image"
+              width={23}
+              height={23}
+              className="h-23 w-23"
+            />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
           </div>
         </CardContent>
