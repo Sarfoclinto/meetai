@@ -2,21 +2,36 @@
 import ErrorState from "@/components/error-state";
 import LoadingState from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import AgentIdViewHeader from "../components/agent-id-view-header";
 import GeneratedAvatar from "@/components/generated-avatar";
 import { Badge } from "@/components/ui/badge";
 import { VideoIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   agentId: string;
 }
 
 const AgentIdView = ({ agentId }: Props) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const trpc = useTRPC();
 
   const { data } = useSuspenseQuery(
     trpc.agents.getOne.queryOptions({ id: agentId }),
+  );
+
+  const removeAgent = useMutation(
+    trpc.agents.remove.mutationOptions({
+      onSuccess: () => {},
+      onError(error) {},
+    }),
   );
 
   return (
