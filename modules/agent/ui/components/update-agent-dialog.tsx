@@ -12,7 +12,7 @@ const UpdateAgentDialogue = ({ onOpenChange, open, initialValues }: Props) => {
   return (
     <ResponsiveDialog
       title="Update Agent"
-      description="Edit agent detials"
+      description="Edit agent details"
       open={open}
       onOpenChange={onOpenChange}
     >
