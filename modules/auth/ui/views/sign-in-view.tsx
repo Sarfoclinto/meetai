@@ -23,10 +23,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-
 const formSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1, { error: "Password is required" }),
+  email: z.string().email(),
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 const SignInView = () => {
@@ -49,12 +48,12 @@ const SignInView = () => {
       {
         email: data.email,
         password: data.password,
-        callbackURL: "/"
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/")
+          router.push("/");
         },
         onError: ({ error }) => {
           setPending(false);
@@ -70,7 +69,7 @@ const SignInView = () => {
     authClient.signIn.social(
       {
         provider,
-        callbackURL: "/"
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -158,12 +157,12 @@ const SignInView = () => {
                     className="w-full"
                     onClick={() => onSocial("google")}
                   >
-                     <Icon
-                                          icon="mynaui:google-solid"
-                                          width="34"
-                                          height="34"
-                                          style={{ color: "#bcbcbc" }}
-                                        />
+                    <Icon
+                      icon="mynaui:google-solid"
+                      width="34"
+                      height="34"
+                      style={{ color: "#bcbcbc" }}
+                    />
                   </Button>
                   <Button
                     disabled={pending}
@@ -172,12 +171,12 @@ const SignInView = () => {
                     type="button"
                     className="w-full"
                   >
-                     <Icon
-                                          icon="ri:github-fill"
-                                          width="34"
-                                          height="34"
-                                          style={{ color: "#bcbcbc" }}
-                                        />
+                    <Icon
+                      icon="ri:github-fill"
+                      width="34"
+                      height="34"
+                      style={{ color: "#bcbcbc" }}
+                    />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
